@@ -286,9 +286,9 @@ public class Tampilan extends javax.swing.JFrame {
             
             Toolkit toolkit=Toolkit.getDefaultToolkit();
             Image image=toolkit.getImage(gbr.getSelectedFile().getAbsolutePath());
-            //Image imageResized=image.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
-            //String imagedResized = null;
-            ImageIcon imageIcon=new ImageIcon(image);
+            Image imageResized=image.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            //String imageResized = null;
+            ImageIcon imageIcon=new ImageIcon(imageResized);
             
             GambarDisini.setIcon(imageIcon);
         }
@@ -369,8 +369,10 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
         }
+
+        Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
         
-        ImageIcon icon = new ImageIcon(img);
+        ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                          
 
@@ -409,7 +411,9 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
         }
-        ImageIcon icon = new ImageIcon(img);
+        Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+        
+        ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                       
 
@@ -449,8 +453,9 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
           }
-
-        ImageIcon icon = new ImageIcon(img);
+          Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+        
+          ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                         
 
@@ -464,10 +469,39 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void CerminAtasActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+        
     }                                          
 
     private void CerminKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+        BufferedImage img = null;
+        File f = null;
+
+        //Masukin lokasi gambarnya
+        try{
+          f = new File(ImgDir);            
+          img = ImageIO.read(f);
+        }catch(IOException e){
+          System.out.println(e);                                           
+        }
+    
+        //PENTING buat tau ukuran gambarnya
+        int width = img.getWidth();
+        int height = img.getHeight();
+
+        BufferedImage mimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        //create mirror image pixel by pixel
+        for(int y = 0; y < height; y++){
+            for(int lx = 0, rx = width - 1; lx < width; lx++, rx--){
+                //lx mulai dari sisi kiri, rx dari kanan
+                int p = img.getRGB(lx, y);
+                mimg.setRGB(rx, y, p);
+            }
+        }
+        Image resized = mimg.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+        
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
     }                                          
 
     private void RotasiKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
@@ -533,8 +567,9 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
         }
-
-        ImageIcon icon = new ImageIcon(img);
+        Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+        
+        ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
 
     }                              
