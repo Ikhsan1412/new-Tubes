@@ -130,8 +130,19 @@ public class Tampilan extends javax.swing.JFrame {
 
         KecerahanSlide.setMaximum(200);
         KecerahanSlide.setValue(100);
+        KecerahanSlide.setEnabled(false);
+        KecerahanSlide.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                aturKecerahan(evt);
+            }
+        });
 
         CheckKecerahan.setText("Mode kecerahan");
+        CheckKecerahan.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                statusCekKecerahan(evt);
+            }
+        });
 
         jMenu1.setAction(jMenu1.getAction());
         jMenu1.setText("File");
@@ -462,6 +473,80 @@ public class Tampilan extends javax.swing.JFrame {
     private void RotasiKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
     }                                          
+
+    private void aturKecerahan(javax.swing.event.ChangeEvent evt) {                               
+        // TODO add your handling code here:
+        //Pemasukan treshold
+        int temp = KecerahanSlide.getValue();
+        int treshold = temp - 100;
+
+        //Mulai perubahan citra
+        BufferedImage img = null;
+        File f = null;
+
+        //Masukin lokasi gambarnya
+        try{
+          f = new File(ImgDir);            
+          img = ImageIO.read(f);
+        }catch(IOException e){
+          System.out.println(e);                                           
+        }
+    
+        //PENTING buat tau ukuran gambarnya
+        int width = img.getWidth();
+        int height = img.getHeight();
+
+        for(int y = 0; y < height; y++){
+            for(int x = 0; x < width; x++){
+              int p = img.getRGB(x,y);
+      
+              int a = (p>>24)&0xff;
+              int r = (p>>16)&0xff;
+              int g = (p>>8)&0xff;
+              int b = p&0xff;
+      
+              r = r + treshold;
+              g = g + treshold;
+              b = b + treshold;
+              if(r > 255){
+                r = 255;
+              }
+              if(g > 255){
+                g = 255;
+              }
+              if(b > 255){
+                b = 255;
+              }
+              if(r < 0){
+                r = 0;
+              }
+              if(g < 0){
+                g = 0;
+              }
+              if(b < 0){
+                b = 0;
+              }
+              //Harus pake syarat batas... gw lagi cari cara buat nyederhanain
+      
+              p = (a<<24) | (r<<16) | (g<<8) | b;                             //ini masukin warna baru ke gambar
+      
+              img.setRGB(x, y, p);
+            }
+        }
+
+        ImageIcon icon = new ImageIcon(img);
+        GambarDisini.setIcon(icon);
+
+    }                              
+
+    private void statusCekKecerahan(javax.swing.event.ChangeEvent evt) {                                    
+        // TODO add your handling code here:
+        if(CheckKecerahan.isSelected()){
+            KecerahanSlide.setEnabled(true);
+        }else{
+            KecerahanSlide.setEnabled(false);
+        }
+    }                                   
 
     //Variabel yang mungkin bantu... entahlah
     String ImgDir;
