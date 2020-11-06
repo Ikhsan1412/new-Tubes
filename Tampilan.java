@@ -52,12 +52,13 @@ public class Tampilan extends javax.swing.JFrame {
         RotasiKanan = new javax.swing.JButton();
         CerminAtas = new javax.swing.JButton();
         CerminKiri = new javax.swing.JButton();
+        KecerahanSlide = new javax.swing.JSlider();
+        Kecerahan = new javax.swing.JLabel();
         MenuUtama = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         LoadGambar = new javax.swing.JMenuItem();
         Keluar = new javax.swing.JMenuItem();
         EditMenu = new javax.swing.JMenu();
-        Kecerahan = new javax.swing.JMenuItem();
         Negatif = new javax.swing.JMenuItem();
         HitamPutih = new javax.swing.JMenuItem();
         Grayscale = new javax.swing.JMenuItem();
@@ -127,6 +128,11 @@ public class Tampilan extends javax.swing.JFrame {
             }
         });
 
+        KecerahanSlide.setMaximum(200);
+        KecerahanSlide.setValue(100);
+
+        Kecerahan.setText("Kecerahan");
+
         jMenu1.setAction(jMenu1.getAction());
         jMenu1.setText("File");
 
@@ -149,14 +155,6 @@ public class Tampilan extends javax.swing.JFrame {
         MenuUtama.add(jMenu1);
 
         EditMenu.setText("Edit");
-
-        Kecerahan.setText("Kecerahan");
-        Kecerahan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                KecerahanActionPerformed(evt);
-            }
-        });
-        EditMenu.add(Kecerahan);
 
         Negatif.setText("Negatif");
         Negatif.addActionListener(new java.awt.event.ActionListener() {
@@ -191,7 +189,9 @@ public class Tampilan extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(Kecerahan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(419, 419, 419))
             .addGroup(layout.createSequentialGroup()
@@ -220,7 +220,9 @@ public class Tampilan extends javax.swing.JFrame {
                         .addGap(392, 392, 392)
                         .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(361, 361, 361)
+                        .addContainerGap()
+                        .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(151, 151, 151)
                         .addComponent(CerminAtas)
                         .addGap(37, 37, 37)
                         .addComponent(CerminKiri)))
@@ -250,12 +252,16 @@ public class Tampilan extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(11, 11, 11)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CerminAtas)
-                    .addComponent(CerminKiri))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .addComponent(jLabel3)
+                    .addComponent(Kecerahan))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(CerminAtas)
+                        .addComponent(CerminKiri))
+                    .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -269,20 +275,20 @@ public class Tampilan extends javax.swing.JFrame {
             Toolkit toolkit=Toolkit.getDefaultToolkit();
             Image image=toolkit.getImage(gbr.getSelectedFile().getAbsolutePath());
             //Image imageResized=image.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
-            //String image = null;
+            //String imagedResized = null;
             ImageIcon imageIcon=new ImageIcon(image);
             
             GambarDisini.setIcon(imageIcon);
         }
         direktori(gbr.getSelectedFile().getAbsolutePath());
-    }
+    }                                          
 
     private void direktori(String dir){
         String temp = dir;
         String newDir = temp.replace("\\", "\\\\");
         ImgDir = newDir;
     }
-
+    
     private void KeluarActionPerformed(java.awt.event.ActionEvent evt) {                                       
          System.exit(0);  // TODO add your handling code here:
     }                                      
@@ -355,12 +361,6 @@ public class Tampilan extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon(img);
         GambarDisini.setIcon(icon);
     }                                          
-
-    private void KecerahanActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
-        //Pemasukan treshold
-
-    }                                         
 
     private void NegatifActionPerformed(java.awt.event.ActionEvent evt) {                                        
         // TODO add your handling code here:
@@ -460,12 +460,11 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void RotasiKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-    }
-    
-    
+    }                                          
+
     //Variabel yang mungkin bantu... entahlah
     String ImgDir;
-
+    
     /**
      * @param args the command line arguments
      */
@@ -508,7 +507,8 @@ public class Tampilan extends javax.swing.JFrame {
     private javax.swing.JLabel GambarDisini;
     private javax.swing.JMenuItem Grayscale;
     private javax.swing.JMenuItem HitamPutih;
-    private javax.swing.JMenuItem Kecerahan;
+    private javax.swing.JLabel Kecerahan;
+    private javax.swing.JSlider KecerahanSlide;
     private javax.swing.JMenuItem Keluar;
     private javax.swing.JMenuItem LoadGambar;
     private javax.swing.JMenuBar MenuUtama;
