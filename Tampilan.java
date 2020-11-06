@@ -53,7 +53,7 @@ public class Tampilan extends javax.swing.JFrame {
         CerminAtas = new javax.swing.JButton();
         CerminKiri = new javax.swing.JButton();
         KecerahanSlide = new javax.swing.JSlider();
-        Kecerahan = new javax.swing.JLabel();
+        CheckKecerahan = new javax.swing.JCheckBox();
         MenuUtama = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         LoadGambar = new javax.swing.JMenuItem();
@@ -131,7 +131,7 @@ public class Tampilan extends javax.swing.JFrame {
         KecerahanSlide.setMaximum(200);
         KecerahanSlide.setValue(100);
 
-        Kecerahan.setText("Kecerahan");
+        CheckKecerahan.setText("Mode kecerahan");
 
         jMenu1.setAction(jMenu1.getAction());
         jMenu1.setText("File");
@@ -188,12 +188,6 @@ public class Tampilan extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Kecerahan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(419, 419, 419))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -221,11 +215,18 @@ public class Tampilan extends javax.swing.JFrame {
                         .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(151, 151, 151)
-                        .addComponent(CerminAtas)
-                        .addGap(37, 37, 37)
-                        .addComponent(CerminKiri)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(CheckKecerahan)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3)
+                                .addGap(409, 409, 409))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(151, 151, 151)
+                                .addComponent(CerminAtas)
+                                .addGap(37, 37, 37)
+                                .addComponent(CerminKiri)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -251,10 +252,10 @@ public class Tampilan extends javax.swing.JFrame {
                         .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(Kecerahan))
+                    .addComponent(CheckKecerahan))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -503,11 +504,11 @@ public class Tampilan extends javax.swing.JFrame {
     // Variables declaration - do not modify                     
     private javax.swing.JButton CerminAtas;
     private javax.swing.JButton CerminKiri;
+    private javax.swing.JCheckBox CheckKecerahan;
     private javax.swing.JMenu EditMenu;
     private javax.swing.JLabel GambarDisini;
     private javax.swing.JMenuItem Grayscale;
     private javax.swing.JMenuItem HitamPutih;
-    private javax.swing.JLabel Kecerahan;
     private javax.swing.JSlider KecerahanSlide;
     private javax.swing.JMenuItem Keluar;
     private javax.swing.JMenuItem LoadGambar;
