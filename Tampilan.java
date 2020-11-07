@@ -572,7 +572,41 @@ public class Tampilan extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
 
-    }                              
+    }
+    
+    //Fungsi tambahan
+    public static void cropping(int up, int left, int down, int right) {
+        BufferedImage img = null;
+        File f = null;
+
+        Tampilan tampilan = null;
+        tampilan = new Tampilan();
+
+        //Masukin lokasi gambarnya
+        try{
+          f = new File(tampilan.ImgDir);            
+          img = ImageIO.read(f);
+        }catch(IOException e){
+          System.out.println(e);                                           
+        }
+    
+        //PENTING buat tau ukuran gambarnya
+        int width = img.getWidth();
+        int height = img.getHeight();
+
+        //Crop size
+        int potongKanan = width - right;
+        int potongBawah = height - down;
+
+        //SubImage
+        BufferedImage subImg;
+        subImg = img.getSubimage(left, up, potongKanan, potongBawah);
+
+        //Out
+        ImageIcon icon = new ImageIcon(subImg);
+        tampilan.GambarDisini.setIcon(icon);
+
+    }
 
     private void statusCekKecerahan(javax.swing.event.ChangeEvent evt) {                                    
         // TODO add your handling code here:
