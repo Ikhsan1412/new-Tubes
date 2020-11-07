@@ -51,15 +51,14 @@ public class Tampilan extends javax.swing.JFrame {
         Potong = new javax.swing.JButton();
         Zoom = new javax.swing.JLabel();
         Rotasi = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        Cermin = new javax.swing.JLabel();
         ZoomBesar = new javax.swing.JButton();
         ZoomKecil = new javax.swing.JButton();
-        RotasiKiri = new javax.swing.JButton();
-        RotasiKanan = new javax.swing.JButton();
         CerminAtas = new javax.swing.JButton();
         CerminKiri = new javax.swing.JButton();
         KecerahanSlide = new javax.swing.JSlider();
         CheckKecerahan = new javax.swing.JCheckBox();
+        gerakanRotasi = new javax.swing.JSlider();
         MenuUtama = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         LoadGambar = new javax.swing.JMenuItem();
@@ -90,7 +89,7 @@ public class Tampilan extends javax.swing.JFrame {
 
         Rotasi.setText("Rotasi");
 
-        jLabel3.setText("Cermin");
+        Cermin.setText("Cermin");
 
         ZoomBesar.setText("Besar");
         ZoomBesar.addActionListener(new java.awt.event.ActionListener() {
@@ -103,20 +102,6 @@ public class Tampilan extends javax.swing.JFrame {
         ZoomKecil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ZoomKecilActionPerformed(evt);
-            }
-        });
-
-        RotasiKiri.setText("Kiri");
-        RotasiKiri.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RotasiKiriActionPerformed(evt);
-            }
-        });
-
-        RotasiKanan.setText("Kanan");
-        RotasiKanan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RotasiKananActionPerformed(evt);
             }
         });
 
@@ -147,6 +132,14 @@ public class Tampilan extends javax.swing.JFrame {
         CheckKecerahan.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 statusCekKecerahan(evt);
+            }
+        });
+
+        gerakanRotasi.setMaximum(720);
+        gerakanRotasi.setValue(360);
+        gerakanRotasi.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                gerakanRotasiStateChanged(evt);
             }
         });
 
@@ -208,43 +201,41 @@ public class Tampilan extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(48, 48, 48)
-                                .addComponent(Zoom))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(ZoomBesar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ZoomKecil, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(10, 10, 10)
-                        .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(RotasiKiri, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(RotasiKanan, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(56, 56, 56)
-                                .addComponent(Rotasi))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(392, 392, 392)
-                        .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(CheckKecerahan)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3)
-                                .addGap(409, 409, 409))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(151, 151, 151)
                                 .addComponent(CerminAtas)
                                 .addGap(37, 37, 37)
-                                .addComponent(CerminKiri)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(CerminKiri)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(gerakanRotasi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(CheckKecerahan)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Cermin)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Rotasi)
+                                .addGap(81, 81, 81))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(48, 48, 48)
+                                        .addComponent(Zoom))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(ZoomBesar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(ZoomKecil, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(10, 10, 10)
+                                .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(392, 392, 392)
+                                .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 138, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,27 +249,27 @@ public class Tampilan extends javax.swing.JFrame {
                             .addComponent(ZoomBesar)
                             .addComponent(ZoomKecil)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(165, 165, 165)
-                        .addComponent(Rotasi)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(RotasiKiri)
-                            .addComponent(RotasiKanan)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(CheckKecerahan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(CerminAtas)
-                        .addComponent(CerminKiri))
-                    .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(Cermin)
+                            .addComponent(CheckKecerahan))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(CerminAtas)
+                                .addComponent(CerminKiri))
+                            .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Rotasi)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gerakanRotasi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -313,17 +304,12 @@ public class Tampilan extends javax.swing.JFrame {
          System.exit(0);  // TODO add your handling code here:
     }                                      
 
-    private void RotasiKananActionPerformed(java.awt.event.ActionEvent evt) {                                            
-         // TODO add your handling code here:
-    }                                           
-
     private void PotongActionPerformed(java.awt.event.ActionEvent evt) {                                       
             new FormPotong().setVisible(true);        // TODO add your handling code here:
     }                                      
 
     private void HitamPutihActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-        
         //Pemasukan treshold
         String string;
         String inputHitput = "";
@@ -554,10 +540,6 @@ public class Tampilan extends javax.swing.JFrame {
         GambarDisini.setIcon(icon);
     }                                          
 
-    private void RotasiKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
-
     private void aturKecerahan(javax.swing.event.ChangeEvent evt) {                               
         // TODO add your handling code here:
         //Pemasukan treshold
@@ -617,6 +599,7 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
         }
+
         Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
         
         ImageIcon icon = new ImageIcon(resized);
@@ -632,6 +615,10 @@ public class Tampilan extends javax.swing.JFrame {
             KecerahanSlide.setEnabled(false);
         }
     }                                   
+
+    private void gerakanRotasiStateChanged(javax.swing.event.ChangeEvent evt) {                                           
+        // TODO add your handling code here:
+    }                                          
 
     //Variabel yang mungkin bantu... entahlah
     String ImgDir;
@@ -674,6 +661,7 @@ public class Tampilan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
+    private javax.swing.JLabel Cermin;
     private javax.swing.JButton CerminAtas;
     private javax.swing.JButton CerminKiri;
     private javax.swing.JCheckBox CheckKecerahan;
@@ -688,12 +676,10 @@ public class Tampilan extends javax.swing.JFrame {
     private javax.swing.JMenuItem Negatif;
     private javax.swing.JButton Potong;
     private javax.swing.JLabel Rotasi;
-    private javax.swing.JButton RotasiKanan;
-    private javax.swing.JButton RotasiKiri;
     private javax.swing.JLabel Zoom;
     private javax.swing.JButton ZoomBesar;
     private javax.swing.JButton ZoomKecil;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JSlider gerakanRotasi;
     private javax.swing.JMenu jMenu1;
     private java.awt.Menu menu3;
     private java.awt.Menu menu4;
