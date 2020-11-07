@@ -293,6 +293,7 @@ public class Tampilan extends javax.swing.JFrame {
             GambarDisini.setIcon(imageIcon);
         }
         direktori(gbr.getSelectedFile().getAbsolutePath());
+        mirorKiri = false;
     }                                          
 
     private void direktori(String dir){
@@ -476,6 +477,7 @@ public class Tampilan extends javax.swing.JFrame {
         // TODO add your handling code here:
         BufferedImage img = null;
         File f = null;
+        Image resized = null;
 
         //Masukin lokasi gambarnya
         try{
@@ -498,8 +500,13 @@ public class Tampilan extends javax.swing.JFrame {
                 mimg.setRGB(rx, y, p);
             }
         }
-        Image resized = mimg.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
-        
+        if(mirorKiri == false){
+            resized = mimg.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            mirorKiri = true;
+        }else if(mirorKiri == true){
+            resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            mirorKiri = false;
+        }
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                          
@@ -619,6 +626,7 @@ public class Tampilan extends javax.swing.JFrame {
 
     //Variabel yang mungkin bantu... entahlah
     String ImgDir;
+    boolean mirorKiri;
     
     /**
      * @param args the command line arguments
