@@ -9,6 +9,13 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
+import java.awt.AWTException;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.geom.AffineTransform;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.JPanel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -294,6 +301,7 @@ public class Tampilan extends javax.swing.JFrame {
         }
         direktori(gbr.getSelectedFile().getAbsolutePath());
         mirorKiri = false;
+        mirorAtas = false;
     }                                          
 
     private void direktori(String dir){
@@ -470,6 +478,43 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void CerminAtasActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+        BufferedImage img = null;
+        File f = null;
+        Image resized = null;
+        
+
+        //Masukin lokasi gambarnya
+        try{
+          f = new File(ImgDir);            
+          img = ImageIO.read(f);
+        }catch(IOException e){
+          System.out.println(e);                                           
+        }
+    
+        //PENTING buat tau ukuran gambarnya
+        int height = img.getHeight();
+        BufferedImage flipImg = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+
+        //fungsi afine transform
+        AffineTransform tran = AffineTransform.getTranslateInstance(0, height);
+        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
+        tran.concatenate(flip);
+
+        Graphics2D g = flipImg.createGraphics();
+        g.setTransform(tran);
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+
+        if(mirorAtas == false){
+            resized = flipImg.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            mirorAtas = true;
+        }else if(mirorAtas == true){
+            resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            mirorKiri = false;
+        }
+        
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
         
     }                                          
 
@@ -627,6 +672,7 @@ public class Tampilan extends javax.swing.JFrame {
     //Variabel yang mungkin bantu... entahlah
     String ImgDir;
     boolean mirorKiri;
+    boolean mirorAtas;
     
     /**
      * @param args the command line arguments
