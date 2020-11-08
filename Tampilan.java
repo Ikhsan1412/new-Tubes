@@ -52,13 +52,12 @@ public class Tampilan extends javax.swing.JFrame {
         Zoom = new javax.swing.JLabel();
         Rotasi = new javax.swing.JLabel();
         Cermin = new javax.swing.JLabel();
-        ZoomBesar = new javax.swing.JButton();
-        ZoomKecil = new javax.swing.JButton();
         CerminAtas = new javax.swing.JButton();
         CerminKiri = new javax.swing.JButton();
         KecerahanSlide = new javax.swing.JSlider();
         CheckKecerahan = new javax.swing.JCheckBox();
         gerakanRotasi = new javax.swing.JSlider();
+        zoomSlider = new javax.swing.JSlider();
         MenuUtama = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         LoadGambar = new javax.swing.JMenuItem();
@@ -90,20 +89,6 @@ public class Tampilan extends javax.swing.JFrame {
         Rotasi.setText("Rotasi");
 
         Cermin.setText("Cermin");
-
-        ZoomBesar.setText("Besar");
-        ZoomBesar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ZoomBesarActionPerformed(evt);
-            }
-        });
-
-        ZoomKecil.setText("Kecil");
-        ZoomKecil.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ZoomKecilActionPerformed(evt);
-            }
-        });
 
         CerminAtas.setText("Atas");
         CerminAtas.addActionListener(new java.awt.event.ActionListener() {
@@ -139,6 +124,15 @@ public class Tampilan extends javax.swing.JFrame {
         gerakanRotasi.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 gerakanRotasiStateChanged(evt);
+            }
+        });
+
+        zoomSlider.setMaximum(200);
+        zoomSlider.setOrientation(javax.swing.JSlider.VERTICAL);
+        zoomSlider.setValue(100);
+        zoomSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                zoomSliderStateChanged(evt);
             }
         });
 
@@ -220,20 +214,16 @@ public class Tampilan extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(48, 48, 48)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(48, 48, 48)
-                                        .addComponent(Zoom))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(ZoomBesar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(ZoomKecil, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(10, 10, 10)
+                                    .addComponent(zoomSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Zoom))
+                                .addGap(18, 18, 18)
                                 .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(392, 392, 392)
                                 .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 138, Short.MAX_VALUE)))
+                        .addGap(0, 179, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -244,9 +234,7 @@ public class Tampilan extends javax.swing.JFrame {
                         .addGap(166, 166, 166)
                         .addComponent(Zoom)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ZoomBesar)
-                            .addComponent(ZoomKecil)))
+                        .addComponent(zoomSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -410,14 +398,6 @@ public class Tampilan extends javax.swing.JFrame {
         GambarDisini.setIcon(icon);
     }                                         
 
-    private void ZoomBesarActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
-    }                                         
-
-    private void ZoomKecilActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
-    }                                         
-
     private void CerminAtasActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
         //Perubahan citra
@@ -571,6 +551,21 @@ public class Tampilan extends javax.swing.JFrame {
         GambarDisini.setIcon(icon);
     }                                          
 
+    private void zoomSliderStateChanged(javax.swing.event.ChangeEvent evt) {                                        
+        // TODO add your handling code here:
+        int temp = zoomSlider.getValue();
+        int zoom = temp-100;
+
+        BufferedImage img = getFiles();
+        Image resized = null;
+        int newWidth = 550 - zoom;
+        int newHeight = 450 - zoom;
+
+        resized = img.getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT);
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
+    }                                       
+
     //Method?
     private BufferedImage getFiles() {
         BufferedImage img = null;
@@ -648,12 +643,11 @@ public class Tampilan extends javax.swing.JFrame {
     private javax.swing.JButton Potong;
     private javax.swing.JLabel Rotasi;
     private javax.swing.JLabel Zoom;
-    private javax.swing.JButton ZoomBesar;
-    private javax.swing.JButton ZoomKecil;
     private javax.swing.JSlider gerakanRotasi;
     private javax.swing.JMenu jMenu1;
     private java.awt.Menu menu3;
     private java.awt.Menu menu4;
     private java.awt.MenuBar menuBar2;
+    private javax.swing.JSlider zoomSlider;
     // End of variables declaration                   
 }
