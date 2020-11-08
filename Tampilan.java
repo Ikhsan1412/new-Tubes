@@ -135,7 +135,6 @@ public class Tampilan extends javax.swing.JFrame {
             }
         });
 
-        gerakanRotasi.setMaximum(100);
         gerakanRotasi.setValue(0);
         gerakanRotasi.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -525,7 +524,6 @@ public class Tampilan extends javax.swing.JFrame {
         
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
-
     }                              
 
     private void statusCekKecerahan(javax.swing.event.ChangeEvent evt) {                                    
@@ -535,7 +533,7 @@ public class Tampilan extends javax.swing.JFrame {
         }else{
             KecerahanSlide.setEnabled(false);
         }
-    }
+    }                                   
 
     private void gerakanRotasiStateChanged(javax.swing.event.ChangeEvent evt) {                                           
         // TODO add your handling code here:   
@@ -571,9 +569,9 @@ public class Tampilan extends javax.swing.JFrame {
         resized = rotated.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
-    }
-    
-    //fungsi pembantu... mungkin?    
+    }                                          
+
+    //Method?
     private BufferedImage getFiles() {
         BufferedImage img = null;
         File f = null;
@@ -590,7 +588,7 @@ public class Tampilan extends javax.swing.JFrame {
 
           return img;
     }
-
+    
     //Variabel yang mungkin bantu... entahlah
     String ImgDir;
     boolean mirorKiri;
