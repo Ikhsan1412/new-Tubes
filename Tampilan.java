@@ -135,8 +135,8 @@ public class Tampilan extends javax.swing.JFrame {
             }
         });
 
-        gerakanRotasi.setMaximum(720);
-        gerakanRotasi.setValue(360);
+        gerakanRotasi.setMaximum(8);
+        gerakanRotasi.setValue(4);
         gerakanRotasi.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 gerakanRotasiStateChanged(evt);
@@ -321,28 +321,11 @@ public class Tampilan extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Masukkan angka saja!");
             }
         }while(!inputHitput.matches("^[0-9]*$"));
-
         int treshold = Integer.parseInt(inputHitput);
-        
-
-        //Mulai perubahan citra
-        BufferedImage img = null;
-        File f = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);             //di sini harus bener direktorinya
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                                    //cek eror
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        //Perubahan citra
+        BufferedImage img = getFiles();
+        for(int y = 0; y < imgHeight; y++){
+            for(int x = 0; x < imgWidth; x++){
               int p = img.getRGB(x,y);
       
               int a = (p>>24)&0xff;
@@ -364,6 +347,7 @@ public class Tampilan extends javax.swing.JFrame {
             }
         }
 
+        //Menampilkan citra
         Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
         
         ImageIcon icon = new ImageIcon(resized);
@@ -372,23 +356,10 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void NegatifActionPerformed(java.awt.event.ActionEvent evt) {                                        
         // TODO add your handling code here:
-        //Mulai perubahan citra
-        BufferedImage img = null;
-        File f = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        //Perubahan citra
+        BufferedImage img = getFiles();
+        for(int y = 0; y < imgHeight; y++){
+            for(int x = 0; x < imgWidth; x++){
               int p = img.getRGB(x,y);
       
               int a = (p>>24)&0xff;
@@ -405,33 +376,19 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
         }
+
+        //Menampilkan citra
         Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
-        
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                       
 
     private void GrayscaleActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
-        //Mulai perubahan citra
-        BufferedImage img = null;
-        File f = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        //algoritma yang rubah warna jadi hitam-putih di sini
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        //Perubahan citra
+        BufferedImage img = getFiles();
+        for(int y = 0; y < imgHeight; y++){
+            for(int x = 0; x < imgWidth; x++){
               int p = img.getRGB(x,y);
       
               int a = (p>>24)&0xff;
@@ -447,8 +404,9 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
           }
+
+          //Menampilkan
           Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
-        
           ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                         
@@ -463,25 +421,14 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void CerminAtasActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-        BufferedImage img = null;
-        File f = null;
-        Image resized = null;
-        
+        //Perubahan citra
+        BufferedImage img = getFiles();
 
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int height = img.getHeight();
-        BufferedImage flipImg = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+        Image resized = null;
+        BufferedImage flipImg = new BufferedImage(imgWidth, imgHeight, img.getType());
 
         //fungsi afine transform
-        AffineTransform tran = AffineTransform.getTranslateInstance(0, height);
+        AffineTransform tran = AffineTransform.getTranslateInstance(0, imgHeight);
         AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
         tran.concatenate(flip);
 
@@ -504,26 +451,14 @@ public class Tampilan extends javax.swing.JFrame {
 
     private void CerminKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-        BufferedImage img = null;
-        File f = null;
+        //Perubahan citra
+        BufferedImage img = getFiles();
+
         Image resized = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        BufferedImage mimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage mimg = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB);
         //create mirror image pixel by pixel
-        for(int y = 0; y < height; y++){
-            for(int lx = 0, rx = width - 1; lx < width; lx++, rx--){
+        for(int y = 0; y < imgHeight; y++){
+            for(int lx = 0, rx = imgWidth - 1; lx < imgWidth; lx++, rx--){
                 //lx mulai dari sisi kiri, rx dari kanan
                 int p = img.getRGB(lx, y);
                 mimg.setRGB(rx, y, p);
@@ -546,24 +481,10 @@ public class Tampilan extends javax.swing.JFrame {
         int temp = KecerahanSlide.getValue();
         int treshold = temp - 100;
 
-        //Mulai perubahan citra
-        BufferedImage img = null;
-        File f = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        //Perubahan citra
+        BufferedImage img = getFiles();
+        for(int y = 0; y < imgHeight; y++){
+            for(int x = 0; x < imgWidth; x++){
               int p = img.getRGB(x,y);
       
               int a = (p>>24)&0xff;
@@ -614,16 +535,37 @@ public class Tampilan extends javax.swing.JFrame {
         }else{
             KecerahanSlide.setEnabled(false);
         }
-    }                                   
+    }
 
     private void gerakanRotasiStateChanged(javax.swing.event.ChangeEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
+        // TODO add your handling code here:        
+        Image resized = null;
+
+    }       
+    
+    private BufferedImage getFiles() {
+        BufferedImage img = null;
+        File f = null;
+
+        try{
+            f = new File(ImgDir);            
+            img = ImageIO.read(f);
+          }catch(IOException e){
+            System.out.println(e);                                           
+          }
+
+          imgWidth = img.getWidth();
+          imgHeight = img.getHeight();
+
+          return img;
+    }
 
     //Variabel yang mungkin bantu... entahlah
     String ImgDir;
     boolean mirorKiri;
     boolean mirorAtas;
+    int imgWidth;
+    int imgHeight;
     
     /**
      * @param args the command line arguments
