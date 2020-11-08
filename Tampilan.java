@@ -135,8 +135,8 @@ public class Tampilan extends javax.swing.JFrame {
             }
         });
 
-        gerakanRotasi.setMaximum(8);
-        gerakanRotasi.setValue(4);
+        gerakanRotasi.setMaximum(100);
+        gerakanRotasi.setValue(0);
         gerakanRotasi.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 gerakanRotasiStateChanged(evt);
@@ -538,11 +538,42 @@ public class Tampilan extends javax.swing.JFrame {
     }
 
     private void gerakanRotasiStateChanged(javax.swing.event.ChangeEvent evt) {                                           
-        // TODO add your handling code here:        
+        // TODO add your handling code here:   
         Image resized = null;
+        BufferedImage img = getFiles();
+        double angle = 720d * (gerakanRotasi.getValue() / 100d);
+        double rads = Math.toRadians(angle);
+        double sin = Math.abs(Math.sin(rads)), cos = Math.abs(Math.cos(rads));
+        int w = imgWidth;
+        int h = imgHeight;
+        int newWidth = (int) Math.floor(w * cos + h * sin);
+        int newHeight = (int) Math.floor(h * cos + w * sin);
 
-    }       
+        BufferedImage rotated = null;
+        rotated = new BufferedImage(newWidth, newHeight, img.getType());
+        Graphics2D g2d = rotated.createGraphics();
+        AffineTransform at = new AffineTransform();
+        at.translate((newWidth - w) / 2, (newHeight - h) / 2);
+
+        int x, y;
+        if(imgHeight%2 != 0 || imgWidth%2 != 0){
+            x = Math.round(imgWidth/2);
+            y = Math.round(imgHeight/2);
+        }else{
+            x = imgWidth/2;
+            y = imgWidth/2;
+        }
+        at.rotate(rads, x, y);
+        g2d.setTransform(at);
+        g2d.drawImage(img, 0, 0, null);
+        g2d.dispose();
+
+        resized = rotated.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
+    }
     
+    //fungsi pembantu... mungkin?    
     private BufferedImage getFiles() {
         BufferedImage img = null;
         File f = null;
