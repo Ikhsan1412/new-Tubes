@@ -4,6 +4,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
+
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -292,7 +294,46 @@ public class Tampilan extends javax.swing.JFrame {
     }                                      
 
     private void PotongActionPerformed(java.awt.event.ActionEvent evt) {                                       
-            new FormPotong().setVisible(true);        // TODO add your handling code here:
+        //WOOOH INPUT PEMOTONGAN PAK!
+        JTextField cropAtas = new JTextField();
+        JTextField cropBawah = new JTextField();
+        JTextField cropKiri = new JTextField();
+        JTextField cropKanan = new JTextField();
+
+        Object[] cropping = {
+            "Potong atas: ", cropAtas,
+            "Potong bawah: ", cropBawah,
+            "Potong kiri: ", cropKiri,
+            "Potong kanan: ", cropKanan
+        };
+
+        int atas = 0;
+        int bawah = 0;
+        int kiri = 0;
+        int kanan = 0;
+
+        int isian = JOptionPane.showConfirmDialog(null, cropping, "Masukkan data!", JOptionPane.OK_CANCEL_OPTION);
+        if(isian == JOptionPane.OK_OPTION){
+            if(cropAtas.getText().matches("^[0-9]*$") && cropBawah.getText().matches("^[0-9]*$") && cropKiri.getText().matches("^[0-9]*$") && cropKanan.getText().matches("^[0-9]*$")){
+                if((atas+bawah) > 450 || (kiri + kanan) > 550){
+                    JOptionPane.showMessageDialog(null, "Tolong masukkan angka yang lebih kecil");
+                }else{
+                    atas = Integer.parseInt(cropAtas.getText());
+                    bawah = Integer.parseInt(cropBawah.getText());
+                    kiri = Integer.parseInt(cropKiri.getText());
+                    kanan = Integer.parseInt(cropKanan.getText());
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Masukkan angka saja!");
+            }
+        }
+
+        //MULAI RUBAH CITRA COEK
+        BufferedImage img = getFiles();
+        BufferedImage cut = img.getSubimage(kiri, atas, kanan, bawah);
+        Image resized = cut.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
     }                                      
 
     private void HitamPutihActionPerformed(java.awt.event.ActionEvent evt) {                                           
