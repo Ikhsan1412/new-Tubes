@@ -211,7 +211,7 @@ public class Tampilan extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(Cermin)
-                                .addGap(303, 303, 303)
+                                .addGap(320, 320, 320)
                                 .addComponent(Rotasi)
                                 .addGap(81, 81, 81))))
                     .addGroup(layout.createSequentialGroup()
@@ -513,7 +513,7 @@ public class Tampilan extends javax.swing.JFrame {
         
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
-
+        
         gerakanRotasi.setValue(0);
         SliderBW.setValue(127);
         zoomSlider.setValue(100);
@@ -553,7 +553,7 @@ public class Tampilan extends javax.swing.JFrame {
         resized = rotated.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
-
+        
         KecerahanSlide.setValue(255);
         SliderBW.setValue(127);
         zoomSlider.setValue(100);
@@ -572,7 +572,7 @@ public class Tampilan extends javax.swing.JFrame {
         resized = img.getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT);
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
-
+        
         KecerahanSlide.setValue(255);
         gerakanRotasi.setValue(0);
         SliderBW.setValue(127);
@@ -581,6 +581,7 @@ public class Tampilan extends javax.swing.JFrame {
     private void SliderBWStateChanged(javax.swing.event.ChangeEvent evt) {                                      
         // TODO add your handling code here:
         BWChanger(SliderBW.getValue());
+        
         KecerahanSlide.setValue(255);
         gerakanRotasi.setValue(0);
         zoomSlider.setValue(100);
