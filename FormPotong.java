@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -56,6 +58,11 @@ public class FormPotong extends javax.swing.JFrame {
         });
 
         jButton1.setText("Ok");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,9 +118,31 @@ public class FormPotong extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void TextAtasActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }                                        
+        int width;
+        int height;
+        do {
+            width = left + right;
+            height = up + down;
+            if( width < 550 || height < 450){
+                up = Integer.parseInt(TextAtas.getText());
+                down = Integer.parseInt(TextBawah.getText());
+                left = Integer.parseInt(TextKiri.getText());
+                right = Integer.parseInt(TextKanan.getText());
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Pemotongan lebih besar dari ukuran gambar");
+            }
+        } while (width > 550 && height > 450);
+        Tampilan.cropping(up, left, down, right);
+    }
+    
+    //Lain-lain yang bisa membantu
+    int up;
+    int down;
+    int left;
+    int right;
 
     /**
      * @param args the command line arguments

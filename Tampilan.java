@@ -1,4 +1,3 @@
-
 import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
@@ -9,6 +8,14 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
+import java.awt.AWTException;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.geom.AffineTransform;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -45,22 +52,21 @@ public class Tampilan extends javax.swing.JFrame {
         Potong = new javax.swing.JButton();
         Zoom = new javax.swing.JLabel();
         Rotasi = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        ZoomBesar = new javax.swing.JButton();
-        ZoomKecil = new javax.swing.JButton();
-        RotasiKiri = new javax.swing.JButton();
-        RotasiKanan = new javax.swing.JButton();
+        Cermin = new javax.swing.JLabel();
         CerminAtas = new javax.swing.JButton();
         CerminKiri = new javax.swing.JButton();
         KecerahanSlide = new javax.swing.JSlider();
-        CheckKecerahan = new javax.swing.JCheckBox();
+        gerakanRotasi = new javax.swing.JSlider();
+        zoomSlider = new javax.swing.JSlider();
+        kecerahan = new javax.swing.JLabel();
+        SliderBW = new javax.swing.JSlider();
+        HitamPutih = new javax.swing.JCheckBox();
         MenuUtama = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         LoadGambar = new javax.swing.JMenuItem();
         Keluar = new javax.swing.JMenuItem();
         EditMenu = new javax.swing.JMenu();
         Negatif = new javax.swing.JMenuItem();
-        HitamPutih = new javax.swing.JMenuItem();
         Grayscale = new javax.swing.JMenuItem();
 
         menu3.setLabel("File");
@@ -84,35 +90,7 @@ public class Tampilan extends javax.swing.JFrame {
 
         Rotasi.setText("Rotasi");
 
-        jLabel3.setText("Cermin");
-
-        ZoomBesar.setText("Besar");
-        ZoomBesar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ZoomBesarActionPerformed(evt);
-            }
-        });
-
-        ZoomKecil.setText("Kecil");
-        ZoomKecil.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ZoomKecilActionPerformed(evt);
-            }
-        });
-
-        RotasiKiri.setText("Kiri");
-        RotasiKiri.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RotasiKiriActionPerformed(evt);
-            }
-        });
-
-        RotasiKanan.setText("Kanan");
-        RotasiKanan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RotasiKananActionPerformed(evt);
-            }
-        });
+        Cermin.setText("Cermin");
 
         CerminAtas.setText("Atas");
         CerminAtas.addActionListener(new java.awt.event.ActionListener() {
@@ -128,19 +106,45 @@ public class Tampilan extends javax.swing.JFrame {
             }
         });
 
-        KecerahanSlide.setMaximum(200);
-        KecerahanSlide.setValue(100);
-        KecerahanSlide.setEnabled(false);
+        KecerahanSlide.setMaximum(510);
+        KecerahanSlide.setValue(255);
         KecerahanSlide.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 aturKecerahan(evt);
             }
         });
 
-        CheckKecerahan.setText("Mode kecerahan");
-        CheckKecerahan.addChangeListener(new javax.swing.event.ChangeListener() {
+        gerakanRotasi.setValue(0);
+        gerakanRotasi.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                statusCekKecerahan(evt);
+                gerakanRotasiStateChanged(evt);
+            }
+        });
+
+        zoomSlider.setMaximum(200);
+        zoomSlider.setOrientation(javax.swing.JSlider.VERTICAL);
+        zoomSlider.setValue(100);
+        zoomSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                zoomSliderStateChanged(evt);
+            }
+        });
+
+        kecerahan.setText("Kecerahan");
+
+        SliderBW.setMaximum(255);
+        SliderBW.setValue(127);
+        SliderBW.setEnabled(false);
+        SliderBW.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                SliderBWStateChanged(evt);
+            }
+        });
+
+        HitamPutih.setText("Hitam Putih");
+        HitamPutih.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                HitamPutihStateChanged(evt);
             }
         });
 
@@ -175,14 +179,6 @@ public class Tampilan extends javax.swing.JFrame {
         });
         EditMenu.add(Negatif);
 
-        HitamPutih.setText("Hitam Putih");
-        HitamPutih.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HitamPutihActionPerformed(evt);
-            }
-        });
-        EditMenu.add(HitamPutih);
-
         Grayscale.setText("Grayscale");
         Grayscale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -202,43 +198,43 @@ public class Tampilan extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(48, 48, 48)
-                                .addComponent(Zoom))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(ZoomBesar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ZoomKecil, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(10, 10, 10)
-                        .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(RotasiKiri, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(RotasiKanan, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(56, 56, 56)
-                                .addComponent(Rotasi))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(392, 392, 392)
-                        .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(CheckKecerahan)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3)
-                                .addGap(409, 409, 409))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(151, 151, 151)
                                 .addComponent(CerminAtas)
                                 .addGap(37, 37, 37)
-                                .addComponent(CerminKiri)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(CerminKiri)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(gerakanRotasi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(Cermin)
+                                .addGap(320, 320, 320)
+                                .addComponent(Rotasi)
+                                .addGap(81, 81, 81))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(392, 392, 392)
+                        .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(zoomSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(Zoom))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(kecerahan)
+                                .addGap(16, 16, 16)))
+                        .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(SliderBW, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(HitamPutih)
+                                .addGap(60, 60, 60)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,31 +244,35 @@ public class Tampilan extends javax.swing.JFrame {
                         .addGap(166, 166, 166)
                         .addComponent(Zoom)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ZoomBesar)
-                            .addComponent(ZoomKecil)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(165, 165, 165)
-                        .addComponent(Rotasi)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(RotasiKiri)
-                            .addComponent(RotasiKanan)))
+                        .addComponent(zoomSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(Potong, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(GambarDisini, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(HitamPutih)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(SliderBW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)))
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(CheckKecerahan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(CerminAtas)
-                        .addComponent(CerminKiri))
-                    .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Cermin)
+                            .addComponent(kecerahan))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(CerminAtas)
+                                .addComponent(CerminKiri))
+                            .addComponent(KecerahanSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Rotasi)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gerakanRotasi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -293,6 +293,8 @@ public class Tampilan extends javax.swing.JFrame {
             GambarDisini.setIcon(imageIcon);
         }
         direktori(gbr.getSelectedFile().getAbsolutePath());
+        mirorKiri = false;
+        mirorAtas = false;
     }                                          
 
     private void direktori(String dir){
@@ -305,96 +307,55 @@ public class Tampilan extends javax.swing.JFrame {
          System.exit(0);  // TODO add your handling code here:
     }                                      
 
-    private void RotasiKananActionPerformed(java.awt.event.ActionEvent evt) {                                            
-         // TODO add your handling code here:
-    }                                           
-
     private void PotongActionPerformed(java.awt.event.ActionEvent evt) {                                       
-            new FormPotong().setVisible(true);        // TODO add your handling code here:
-    }                                      
+        //WOOOH INPUT PEMOTONGAN PAK!
+        JTextField cropAtas = new JTextField();
+        JTextField cropBawah = new JTextField();
+        JTextField cropKiri = new JTextField();
+        JTextField cropKanan = new JTextField();
 
-    private void HitamPutihActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-        
-        //Pemasukan treshold
-        String string;
-        String inputHitput = "";
-        do{
-            string = JOptionPane.showInputDialog("Masukan treshold!");
-            if(string.matches("^[0-9]*$")){
-                inputHitput = string;
+        Object[] cropping = {
+            "Potong atas: ", cropAtas,
+            "Potong bawah: ", cropBawah,
+            "Potong kiri: ", cropKiri,
+            "Potong kanan: ", cropKanan
+        };
+
+        int atas = 0;
+        int bawah = 0;
+        int kiri = 0;
+        int kanan = 0;
+
+        int isian = JOptionPane.showConfirmDialog(null, cropping, "Masukkan data!", JOptionPane.OK_CANCEL_OPTION);
+        if(isian == JOptionPane.OK_OPTION){
+            if(cropAtas.getText().matches("^[0-9]*$") && cropBawah.getText().matches("^[0-9]*$") && cropKiri.getText().matches("^[0-9]*$") && cropKanan.getText().matches("^[0-9]*$")){
+                if((atas+bawah) > 450 || (kiri + kanan) > 550){
+                    JOptionPane.showMessageDialog(null, "Tolong masukkan angka yang lebih kecil");
+                }else{
+                    atas = Integer.parseInt(cropAtas.getText());
+                    bawah = Integer.parseInt(cropBawah.getText());
+                    kiri = Integer.parseInt(cropKiri.getText());
+                    kanan = Integer.parseInt(cropKanan.getText());
+                }
             }else{
                 JOptionPane.showMessageDialog(null, "Masukkan angka saja!");
             }
-        }while(!inputHitput.matches("^[0-9]*$"));
-
-        int treshold = Integer.parseInt(inputHitput);
-        
-
-        //Mulai perubahan citra
-        BufferedImage img = null;
-        File f = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);             //di sini harus bener direktorinya
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                                    //cek eror
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
-              int p = img.getRGB(x,y);
-      
-              int a = (p>>24)&0xff;
-              int r = (p>>16)&0xff;
-              int g = (p>>8)&0xff;
-              int b = p&0xff;
-              int avg = (r+g+b)/3;                                                    //Ini hasil rata-rata dari nilai argb buat dimasukin nanti
-      
-              if(avg > treshold){
-                  r = g = b = 255;
-              }else{
-                  r = g = b = 0;
-              }
-              p = (a<<24) | (r<<16) | (g<<8) | b;                               //ini masukin warna baru ke gambar
-      
-              //Ini tresholdnya 120 jadi pake syarat kalo di atas 120 rgb dibikin 255/putih kalo di bawah dibikin 0/hitam
-      
-              img.setRGB(x, y, p);
-            }
         }
 
-        Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
-        
+        //MULAI RUBAH CITRA COEK
+        BufferedImage img = getFiles();
+        BufferedImage cut = img.getSubimage(kiri, atas, kanan, bawah);
+        Image resized = cut.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
-    }                                          
+    }                                      
 
     private void NegatifActionPerformed(java.awt.event.ActionEvent evt) {                                        
         // TODO add your handling code here:
-        //Mulai perubahan citra
-        BufferedImage img = null;
-        File f = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        //Perubahan citra
+        BufferedImage img = getFiles();
+        for(int y = 0; y < imgHeight; y++){
+            for(int x = 0; x < imgWidth; x++){
               int p = img.getRGB(x,y);
       
               int a = (p>>24)&0xff;
@@ -411,33 +372,19 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
         }
+
+        //Menampilkan citra
         Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
-        
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                       
 
     private void GrayscaleActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
-        //Mulai perubahan citra
-        BufferedImage img = null;
-        File f = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        //algoritma yang rubah warna jadi hitam-putih di sini
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        //Perubahan citra
+        BufferedImage img = getFiles();
+        for(int y = 0; y < imgHeight; y++){
+            for(int x = 0; x < imgWidth; x++){
               int p = img.getRGB(x,y);
       
               int a = (p>>24)&0xff;
@@ -453,85 +400,79 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
           }
+
+          //Menampilkan
           Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
-        
           ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                         
 
-    private void ZoomBesarActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
-    }                                         
-
-    private void ZoomKecilActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
-    }                                         
-
     private void CerminAtasActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-        
-    }                                          
+        //Perubahan citra
+        BufferedImage img = getFiles();
 
-    private void CerminKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-        BufferedImage img = null;
-        File f = null;
+        Image resized = null;
+        BufferedImage flipImg = new BufferedImage(imgWidth, imgHeight, img.getType());
 
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
+        //fungsi afine transform
+        AffineTransform tran = AffineTransform.getTranslateInstance(0, imgHeight);
+        AffineTransform flip = AffineTransform.getScaleInstance(1d, -1d);
+        tran.concatenate(flip);
+
+        Graphics2D g = flipImg.createGraphics();
+        g.setTransform(tran);
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+
+        if(mirorAtas == false){
+            resized = flipImg.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            mirorAtas = true;
+        }else if(mirorAtas == true){
+            resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            mirorKiri = false;
         }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        BufferedImage mimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        //create mirror image pixel by pixel
-        for(int y = 0; y < height; y++){
-            for(int lx = 0, rx = width - 1; lx < width; lx++, rx--){
-                //lx mulai dari sisi kiri, rx dari kanan
-                int p = img.getRGB(lx, y);
-                mimg.setRGB(rx, y, p);
-            }
-        }
-        Image resized = mimg.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
         
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
     }                                          
 
-    private void RotasiKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
+    private void CerminKiriActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+        //Perubahan citra
+        BufferedImage img = getFiles();
+
+        Image resized = null;
+        BufferedImage mimg = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB);
+        //create mirror image pixel by pixel
+        for(int y = 0; y < imgHeight; y++){
+            for(int lx = 0, rx = imgWidth - 1; lx < imgWidth; lx++, rx--){
+                //lx mulai dari sisi kiri, rx dari kanan
+                int p = img.getRGB(lx, y);
+                mimg.setRGB(rx, y, p);
+            }
+        }
+        if(mirorKiri == false){
+            resized = mimg.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            mirorKiri = true;
+        }else if(mirorKiri == true){
+            resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+            mirorKiri = false;
+        }
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
     }                                          
 
     private void aturKecerahan(javax.swing.event.ChangeEvent evt) {                               
         // TODO add your handling code here:
         //Pemasukan treshold
         int temp = KecerahanSlide.getValue();
-        int treshold = temp - 100;
+        int treshold = temp - 255;
 
-        //Mulai perubahan citra
-        BufferedImage img = null;
-        File f = null;
-
-        //Masukin lokasi gambarnya
-        try{
-          f = new File(ImgDir);            
-          img = ImageIO.read(f);
-        }catch(IOException e){
-          System.out.println(e);                                           
-        }
-    
-        //PENTING buat tau ukuran gambarnya
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
+        //Perubahan citra
+        BufferedImage img = getFiles();
+        for(int y = 0; y < imgHeight; y++){
+            for(int x = 0; x < imgWidth; x++){
               int p = img.getRGB(x,y);
       
               int a = (p>>24)&0xff;
@@ -567,24 +508,152 @@ public class Tampilan extends javax.swing.JFrame {
               img.setRGB(x, y, p);
             }
         }
+
         Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
         
         ImageIcon icon = new ImageIcon(resized);
         GambarDisini.setIcon(icon);
-
+        
+        gerakanRotasi.setValue(0);
+        SliderBW.setValue(127);
+        zoomSlider.setValue(100);
     }                              
 
-    private void statusCekKecerahan(javax.swing.event.ChangeEvent evt) {                                    
-        // TODO add your handling code here:
-        if(CheckKecerahan.isSelected()){
-            KecerahanSlide.setEnabled(true);
-        }else{
-            KecerahanSlide.setEnabled(false);
-        }
-    }                                   
+    private void gerakanRotasiStateChanged(javax.swing.event.ChangeEvent evt) {                                           
+        // TODO add your handling code here:   
+        Image resized = null;
+        BufferedImage img = getFiles();
+        double angle = 720d * (gerakanRotasi.getValue() / 100d);
+        double rads = Math.toRadians(angle);
+        double sin = Math.abs(Math.sin(rads)), cos = Math.abs(Math.cos(rads));
+        int w = imgWidth;
+        int h = imgHeight;
+        int newWidth = (int) Math.floor(w * cos + h * sin);
+        int newHeight = (int) Math.floor(h * cos + w * sin);
 
+        BufferedImage rotated = null;
+        rotated = new BufferedImage(newWidth, newHeight, img.getType());
+        Graphics2D g2d = rotated.createGraphics();
+        AffineTransform at = new AffineTransform();
+        at.translate((newWidth - w) / 2, (newHeight - h) / 2);
+
+        int x, y;
+        if(imgHeight%2 != 0 || imgWidth%2 != 0){
+            x = Math.round(imgWidth/2);
+            y = Math.round(imgHeight/2);
+        }else{
+            x = imgWidth/2;
+            y = imgWidth/2;
+        }
+        at.rotate(rads, x, y);
+        g2d.setTransform(at);
+        g2d.drawImage(img, 0, 0, null);
+        g2d.dispose();
+
+        resized = rotated.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
+        
+        KecerahanSlide.setValue(255);
+        SliderBW.setValue(127);
+        zoomSlider.setValue(100);
+    }                                          
+
+    private void zoomSliderStateChanged(javax.swing.event.ChangeEvent evt) {                                        
+        // TODO add your handling code here:
+        int temp = zoomSlider.getValue();
+        int zoom = temp-100;
+
+        BufferedImage img = getFiles();
+        Image resized = null;
+        int newWidth = 550 - zoom;
+        int newHeight = 450 - zoom;
+
+        resized = img.getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT);
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
+        
+        KecerahanSlide.setValue(255);
+        gerakanRotasi.setValue(0);
+        SliderBW.setValue(127);
+    }                                       
+
+    private void SliderBWStateChanged(javax.swing.event.ChangeEvent evt) {                                      
+        // TODO add your handling code here:
+        BWChanger(SliderBW.getValue());
+        
+        KecerahanSlide.setValue(255);
+        gerakanRotasi.setValue(0);
+        zoomSlider.setValue(100);
+    }                                     
+
+    private void HitamPutihStateChanged(javax.swing.event.ChangeEvent evt) {                                        
+        // TODO add your handling code here:
+        if(HitamPutih.isSelected()){
+            SliderBW.setEnabled(true);
+            BWChanger(SliderBW.getValue());
+        }else{
+            SliderBW.setEnabled(false);
+        }
+    }                                       
+
+    //Method?
+    private void BWChanger(int treshold){
+        //Perubahan citra
+        BufferedImage img = getFiles();
+        for(int y = 0; y < imgHeight; y++){
+            for(int x = 0; x < imgWidth; x++){
+              int p = img.getRGB(x,y);
+      
+              int a = (p>>24)&0xff;
+              int r = (p>>16)&0xff;
+              int g = (p>>8)&0xff;
+              int b = p&0xff;
+              int avg = (r+g+b)/3;                                                    //Ini hasil rata-rata dari nilai argb buat dimasukin nanti
+      
+              if(avg > treshold){
+                  r = g = b = 255;
+              }else{
+                  r = g = b = 0;
+              }
+              p = (a<<24) | (r<<16) | (g<<8) | b;                               //ini masukin warna baru ke gambar
+      
+              //Ini tresholdnya 120 jadi pake syarat kalo di atas 120 rgb dibikin 255/putih kalo di bawah dibikin 0/hitam
+      
+              img.setRGB(x, y, p);
+            }
+        }
+
+        //Menampilkan citra
+        Image resized = img.getScaledInstance(550, 450, Image.SCALE_DEFAULT);
+        
+        ImageIcon icon = new ImageIcon(resized);
+        GambarDisini.setIcon(icon);
+    }
+    
+    private BufferedImage getFiles() {
+        BufferedImage img = null;
+        File f = null;
+
+        try{
+            f = new File(ImgDir);            
+            img = ImageIO.read(f);
+          }catch(IOException e){
+            System.out.println(e);                                           
+          }
+
+          imgWidth = img.getWidth();
+          imgHeight = img.getHeight();
+
+          return img;
+    }
+    
     //Variabel yang mungkin bantu... entahlah
     String ImgDir;
+    boolean mirorKiri;
+    boolean mirorAtas;
+    int imgWidth;
+    int imgHeight;
     
     /**
      * @param args the command line arguments
@@ -622,13 +691,13 @@ public class Tampilan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
+    private javax.swing.JLabel Cermin;
     private javax.swing.JButton CerminAtas;
     private javax.swing.JButton CerminKiri;
-    private javax.swing.JCheckBox CheckKecerahan;
     private javax.swing.JMenu EditMenu;
     private javax.swing.JLabel GambarDisini;
     private javax.swing.JMenuItem Grayscale;
-    private javax.swing.JMenuItem HitamPutih;
+    private javax.swing.JCheckBox HitamPutih;
     private javax.swing.JSlider KecerahanSlide;
     private javax.swing.JMenuItem Keluar;
     private javax.swing.JMenuItem LoadGambar;
@@ -636,15 +705,14 @@ public class Tampilan extends javax.swing.JFrame {
     private javax.swing.JMenuItem Negatif;
     private javax.swing.JButton Potong;
     private javax.swing.JLabel Rotasi;
-    private javax.swing.JButton RotasiKanan;
-    private javax.swing.JButton RotasiKiri;
+    private javax.swing.JSlider SliderBW;
     private javax.swing.JLabel Zoom;
-    private javax.swing.JButton ZoomBesar;
-    private javax.swing.JButton ZoomKecil;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JSlider gerakanRotasi;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel kecerahan;
     private java.awt.Menu menu3;
     private java.awt.Menu menu4;
     private java.awt.MenuBar menuBar2;
+    private javax.swing.JSlider zoomSlider;
     // End of variables declaration                   
 }
